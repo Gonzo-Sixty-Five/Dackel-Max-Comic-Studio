@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Picture Max" />
+  <title>Picture Max – Dackel-Max Comic Studio</title>
+  <style>
+    :root {
+      --bg: #121110;
+      --card: #1d1b18;
+      --card-2: #27231f;
+      --border: #3a332c;
+      --amber: #f59e0b;
+      --amber-dark: #b45309;
+      --terracotta: #d95d39;
+      --cream: #f8f4ec;
+      --muted: #a89f91;
+      --green: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--cream);
+      line-height: 1.45;
+      padding-bottom: 40px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #291d12 0%, #1a1613 100%);
+      border-bottom: 2px solid var(--amber);
+      padding: 20px 16px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .header-top {
+      max-width: 820px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--amber), var(--terracotta));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+      flex-shrink: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: 0.3px;
+      color: #fff;
+    }
+
+    .subtitle {
+      margin: 2px 0 0;
+      font-size: 0.8rem;
+      color: var(--amber);
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--amber);
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .pill-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    @media (min-width: 600px) {
+      .pill-group.four-cols {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .pill-btn {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .pill-btn span.sub {
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .pill-btn.active {
+      background: rgba(245, 158, 11, 0.16);
+      border-color: var(--amber);
+      color: #fff;
+      box-shadow: 0 0 0 1px var(--amber);
+    }
+
+    .scene-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    @media (min-width: 600px) {
+      .scene-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      gap: 12px;
+    }
+
+    .toggle-row label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .toggle-row small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.74rem;
+    }
+
+    input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--amber);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    select, input[type="text"], textarea {
+      width: 100%;
+      background: #141210;
+      border: 1px solid var(--border);
+      color: var(--cream);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+
+    select:focus, input[type="text"]:focus, textarea:focus {
+      outline: none;
+      border-color: var(--amber);
+    }
+
+    textarea {
+      min-height: 135px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 140px;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.1s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--amber), #ea580c);
+      color: #14100c;
+    }
+
+    .btn-secondary {
+      background: var(--card-2);
+      color: var(--cream);
+      border: 1px solid var(--border);
+    }
+
+    .btn-success {
+      background: var(--green) !important;
+      color: #06281e !important;
+    }
+
+    /* Comic Preview Card */
+    .comic-preview {
+      margin-top: 12px;
+      background: linear-gradient(180deg, #2d4a22 0%, #1d2e17 65%, #3d2c1e 100%);
+      border: 3px solid #fff;
+      border-radius: 14px;
+      padding: 18px 16px;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 230px;
+    }
+
+    .comic-preview.ratio-9-16 {
+      max-width: 310px;
+      min-height: 390px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .comic-preview.ratio-1-1 {
+      max-width: 340px;
+      min-height: 340px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .speech-bubble {
+      background: #fff;
+      color: #111;
+      padding: 12px 16px;
+      border-radius: 20px;
+      border: 3px solid #111;
+      font-weight: 800;
+      font-size: 0.95rem;
+      position: relative;
+      box-shadow: 4px 4px 0 #111;
+      text-align: center;
+    }
+
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 14px 10px 0;
+      border-style: solid;
+      border-color: #111 transparent transparent;
+    }
+
+    .max-stage {
+      text-align: center;
+      margin-top: 18px;
+    }
+
+    .max-avatar {
+      font-size: 3.4rem;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    }
+
+    .stage-caption {
+      display: inline-block;
+      margin-top: 6px;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fde68a;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+
+    .fav-item {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .fav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+
+    .fav-text {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .mini-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mini-btn {
+      background: #141210;
+      border: 1px solid var(--border);
+      color: var(--cream);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .mini-btn.danger {
+      color: #f87171;
+    }
+
+    .helper-note {
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-top">
+      <div class="brand">
+        <div class="badge-icon">🐾</div>
+        <div>
+          <h1>Picture Max Studio</h1>
+          <div class="subtitle">Rauhaardackel-Comic & Prompt-Generator • Berlin</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 1. Plattform & Format -->
+    <section class="card">
+      <div class="card-title">
+        <span>1. Generator-Ziel & Format</span>
+      </div>
+      <div class="pill-group" id="platformGroup">
+        <button type="button" class="pill-btn active" data-platform="gemini">
+          ✨ Gemini / Google Flow
+          <span class="sub">Inkl. Kamera-Bewegung</span>
+        </button>
+        <button type="button" class="pill-btn" data-platform="drawthings">
+          💻 Draw Things / SDXL
+          <span class="sub">Inkl. Negative Prompt</span>
+        </button>
+      </div>
+
+      <div class="pill-group four-cols" id="ratioGroup" style="margin-top: 10px;">
+        <button type="button" class="pill-btn active" data-ratio="9:16">
+          📱 9:16
+          <span class="sub">TikTok / Shorts</span>
+        </button>
+        <button type="button" class="pill-btn" data-ratio="1:1">
+          💿 1:1
+          <span class="sub">Cover / Insta</span>
+        </button>
+        <button type="button" class="pill-btn" data-ratio="16:9">
+          🎬 16:9
+          <span class="sub">YouTube / Quer</span>
+        </button>
+        <button type="button" class="pill-btn" data-ratio="3:4">
+          🖼️ 3:4
+          <span class="sub">Comic-Poster</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. Bildstil -->
+    <section class="card">
+      <div class="card-title">
+        <span>2. Bildstil wählen</span>
+      </div>
+      <div class="pill-group" id="styleGroup">
+        <button type="button" class="pill-btn active" data-style="pixar">
+          🎥 Pixar 3D Animation
+          <span class="sub">Kino-Look, feines Fell</span>
+        </button>
+        <button type="button" class="pill-btn" data-style="comic">
+          🗯️ Europäischer Comic
+          <span class="sub">Klare Linien, Tim & Struppi</span>
+        </button>
+        <button type="button" class="pill-btn" data-style="cabaret">
+          🎷 1920er Berlin Plakat
+          <span class="sub">Art Deco, Weimar-Charme</span>
+        </button>
+        <button type="button" class="pill-btn" data-style="photo">
+          📸 Fotorealistisch
+          <span class="sub">85mm f/1.8, Golden Hour</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. Szene & Gesichtsausdruck -->
+    <section class="card">
+      <div class="card-title">
+        <span>3. Alltagsszene & Gesichtsausdruck</span>
+      </div>
+      <div class="scene-grid" id="sceneGroup"></div>
+
+      <div style="margin-top: 12px;">
+        <label for="expressionSelect" style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:6px;">
+          Gesichtsausdruck von Max:
+        </label>
+        <select id="expressionSelect">
+          <option value="skeptical">🤨 Skeptischer Berliner Seitenblick (Augenbraue hoch)</option>
+          <option value="begging">🥺 Unwiderstehlicher Dackelblick (große Kulleraugen)</option>
+          <option value="proud">👑 Stolzer Kleingarten-Chef (Brust raus)</option>
+          <option value="sleepy">😴 Tiefenentspannt & verschlafen</option>
+          <option value="barking">📢 Lautstark bellender Wachhund</option>
+        </select>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <label for="customExtra" style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:6px;">
+          Optionales Extra-Detail (Englisch oder Deutsch):
+        </label>
+        <input type="text" id="customExtra" placeholder="z. B. wearing a tiny golden crown, sunny afternoon..." />
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <label for="shortLegsToggle">🐾 Anti-Terrier-Schutz aktiv</label>
+          <small>Erzwingt extrem kurze Dackelbeine & langen Rücken</small>
+        </div>
+        <input type="checkbox" id="shortLegsToggle" checked />
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <label for="gardenBgToggle">🍅 Kleingarten-Kulisse (Adlershof)</label>
+          <small>Holzzaun, San-Marzano-Tomaten & bunte Chilis</small>
+        </div>
+        <input type="checkbox" id="gardenBgToggle" checked />
+      </div>
+    </section>
+
+    <!-- 4. Fertiger Prompt -->
+    <section class="card">
+      <div class="card-title">
+        <span>4. Fertiger KI-Prompt</span>
+      </div>
+      <textarea id="promptOutput" readonly></textarea>
+      <div class="helper-note">
+        Tipp: Wenn du bei Gemini oder Flow ein Referenzfoto von Max hochlädst, erkennt die KI sein Gesicht direkt wieder.
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" id="copyPromptBtn">📋 Prompt kopieren</button>
+        <button type="button" class="btn btn-secondary" id="saveFavBtn">⭐ Als Favorit merken</button>
+      </div>
+
+      <!-- Zusatzbox je nach Plattform -->
+      <div id="extraBox" style="margin-top: 14px;">
+        <div class="card-title" id="extraBoxTitle" style="font-size: 0.85rem; margin-bottom: 6px;">
+          🎬 Google Flow Kamera-Bewegung (Image-to-Video)
+        </div>
+        <textarea id="extraOutput" readonly style="min-height: 72px;"></textarea>
+        <div class="btn-row">
+          <button type="button" class="btn btn-secondary" id="copyExtraBtn">📋 Zusatz-Prompt kopieren</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Berliner Comic-Vorschau & Social Caption -->
+    <section class="card">
+      <div class="card-title">
+        <span>5. Berliner Schnauze & Comic-Vorschau</span>
+      </div>
+      <label for="quoteSelect" style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:6px;">
+        Spruch auswählen oder selbst tippen:
+      </label>
+      <select id="quoteSelect" style="margin-bottom: 8px;"></select>
+      <input type="text" id="quoteInput" placeholder="Eigener Berliner Spruch für Max..." />
+
+      <div class="comic-preview ratio-9-16" id="comicPreview">
+        <div class="speech-bubble" id="bubbleText">
+          „Ick hab det jefühl, hier jibt’s heute keene Leckerlis.“
+        </div>
+        <div class="max-stage">
+          <div class="max-avatar">🐕</div>
+          <div class="stage-caption" id="stageCaption">9:16 • Pixar 3D Animation</div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top: 14px;">
+        <button type="button" class="btn btn-secondary" id="copyCaptionBtn">📱 TikTok / Insta Text + Hashtags kopieren</button>
+      </div>
+    </section>
+
+    <!-- 6. Gespeicherte Favoriten -->
+    <section class="card">
+      <div class="card-title">
+        <span>6. Deine gespeicherten Max-Prompts</span>
+      </div>
+      <div id="favList">
+        <div class="helper-note">Noch keine Favoriten gespeichert.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const SCENES = [
+      {
+        id: "patrol",
+        icon: "🍅",
+        title: "Garten-Patrouille",
+        sub: "Kontrollgang bei den Tomaten",
+        prompt: "patrolling proudly on a garden path between lush green tomato vines heavy with ripe red San Marzano tomatoes and chili bushes",
+        motion: "Slow low-angle tracking shot following the short-legged dachshund walking proudly down the sunny garden path, gentle breeze moving the tomato leaves, warm golden sunlight."
+      },
+      {
+        id: "sofa",
+        icon: "👑",
+        title: "König auf dem Sofa",
+        sub: "Regiert die Gartenlounge",
+        prompt: "sitting majestically like a royal king right in the middle of cozy outdoor rattan sofa cushions, ruling the terrace",
+        motion: "Subtle slow push-in camera movement towards the dachshund sitting like a king on the cushions, slight curious ear twitch and blinking eyes."
+      },
+      {
+        id: "bowl",
+        icon: "🥣",
+        title: "Leerer Napf Drama",
+        sub: "Seit Wochen nichts gegessen",
+        prompt: "sitting dramatically in front of his completely empty dog bowl on rustic tiles, staring upward as if he has not eaten in weeks",
+        motion: "Gentle downward tilt shot ending on the dachshund looking up with huge pleading eyes next to his empty bowl, subtle breathing motion."
+      },
+      {
+        id: "gate",
+        icon: "📮",
+        title: "Wachhund am Tor",
+        sub: "Meldet den Postboten",
+        prompt: "standing heroically with chest puffed out at the wooden garden gate, barking furiously like a mighty watchdog at an approaching postman",
+        motion: "Dynamic handheld low-angle shot at the wooden garden gate as the dachshund barks heroically, shallow depth of field with postman blurred in background."
+      },
+      {
+        id: "blanket",
+        icon: "🛏️",
+        title: "Decken-Höhle",
+        sub: "Nur die Nase schaut raus",
+        prompt: "snuggled deeply inside a warm cozy fleece blanket cave, only his wet black nose, beard, and bushy eyebrows peeking out curiously",
+        motion: "Very slow intimate close-up on the dachshund's nose and eyes peeking out from the warm fleece blanket, soft morning light dust motes."
+      },
+      {
+        id: "grill",
+        icon: "🌭",
+        title: "Grill-Inspektor",
+        sub: "Bewacht die Bratwurst",
+        prompt: "sitting laser-focused next to a smoking charcoal barbecue grill in the garden, hypnotized by sizzling sausages",
+        motion: "Slow cinematic orbit around the dachshund staring intensely at the smoking grill, rising wisps of barbecue smoke in golden evening light."
+      },
+      {
+        id: "digging",
+        icon: "🐾",
+        title: "Maulwurf-Jäger",
+        sub: "Erde auf der Nase",
+        prompt: "with a smudge of fresh dark garden soil on his nose and beard after digging an important hole next to a flower bed",
+        motion: "Playful low-angle camera push-in as the dachshund proudly stands beside a freshly dug hole with dirt on his nose, tail wagging slightly."
+      },
+      {
+        id: "pool",
+        icon: "🕶️",
+        title: "Sommer-Urlauber",
+        sub: "Chillen am Gartenpool",
+        prompt: "lounging coolly on a striped beach towel next to a round garden pool in summer sunshine, looking like a relaxed VIP",
+        motion: "Smooth horizontal pan across the sunny garden pool deck revealing the dachshund relaxing like a VIP on a striped towel, shimmering water reflections."
+      }
+    ];
+
+    const STYLES = {
+      pixar: "Pixar 3D animation style, Disney-Pixar feature film quality, warm cinematic lighting, ultra-detailed individual rough fur strands, expressive character design, rich depth of field, Octane render",
+      comic: "classic European comic book illustration style, crisp black ink outlines, vibrant cel-shaded colors, expressive caricature humor, clean ligne claire comic panel aesthetic",
+      cabaret: "vintage 1920s Berlin cabaret poster illustration style, Art Deco framing, warm lithograph print texture, golden ochre and terracotta palette, nostalgic Weimar era charm",
+      photo: "photorealistic candid photography, shot on 85mm f/1.8 lens, natural golden hour sunlight, sharp focus on fur texture and eyes, authentic real-life look, 8k uhd"
+    };
+
+    const EXPRESSIONS = {
+      skeptical: "skeptical side-eye expression with one bushy eyebrow raised in disbelief",
+      begging: "irresistible innocent puppy-dog eyes, slightly tilted head, melting hearts",
+      proud: "proud confident expression, chin held high like the boss of the neighborhood",
+      sleepy: "blissfully relaxed, sleepy half-closed eyes, content cozy expression",
+      barking: "mouth open mid-bark, determined fierce little watchdog expression"
+    };
+
+    const QUOTES = [
+      "„Ick hab det jefühl, hier jibt’s heute keene Leckerlis.“",
+      "„Det sind MEINE San-Marzano-Tomaten, klar soweit?“",
+      "„Postbote? Ick regier’ det hier seit 2015, Keule!“",
+      "„Kurze Beene, aber ’n Herz wie’n Berliner Bär.“",
+      "„Ick bin nich stur. Ick hab nur ’n festen Standpunkt.“",
+      "„Det Napf-Echo is heute wieder unerträglich laut.“",
+      "„Adlershof-Kontrollgang beendet. Allet meins.“"
+    ];
+
+    const state = {
+      platform: "gemini",
+      ratio: "9:16",
+      style: "pixar",
+      sceneId: "patrol",
+      expression: "skeptical",
+      customExtra: "",
+      shortLegs: true,
+      gardenBg: true,
+      quote: QUOTES[0]
+    };
+
+    // DOM Elements
+    const sceneGroup = document.getElementById("sceneGroup");
+    const expressionSelect = document.getElementById("expressionSelect");
+    const customExtra = document.getElementById("customExtra");
+    const shortLegsToggle = document.getElementById("shortLegsToggle");
+    const gardenBgToggle = document.getElementById("gardenBgToggle");
+    const promptOutput = document.getElementById("promptOutput");
+    const extraOutput = document.getElementById("extraOutput");
+    const extraBoxTitle = document.getElementById("extraBoxTitle");
+    const quoteSelect = document.getElementById("quoteSelect");
+    const quoteInput = document.getElementById("quoteInput");
+    const bubbleText = document.getElementById("bubbleText");
+    const stageCaption = document.getElementById("stageCaption");
+    const comicPreview = document.getElementById("comicPreview");
+    const favList = document.getElementById("favList");
+
+    function init() {
+      // Render scenes
+      SCENES.forEach(s => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "pill-btn" + (s.id === state.sceneId ? " active" : "");
+        btn.dataset.scene = s.id;
+        btn.innerHTML = `${s.icon} ${s.title}<span class="sub">${s.sub}</span>`;
+        btn.addEventListener("click", () => {
+          state.sceneId = s.id;
+          document.querySelectorAll("#sceneGroup .pill-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          updateAll();
+        });
+        sceneGroup.appendChild(btn);
+      });
+
+      // Render quotes
+      QUOTES.forEach((q, idx) => {
+        const opt = document.createElement("option");
+        opt.value = q;
+        opt.textContent = q;
+        quoteSelect.appendChild(opt);
+      });
+      quoteInput.value = state.quote;
+
+      // Setup button groups
+      setupPillGroup("platformGroup", "platform", val => { state.platform = val; updateAll(); });
+      setupPillGroup("ratioGroup", "ratio", val => { state.ratio = val; updateAll(); });
+      setupPillGroup("styleGroup", "style", val => { state.style = val; updateAll(); });
+
+      // Other listeners
+      expressionSelect.addEventListener("change", e => { state.expression = e.target.value; updateAll(); });
+      customExtra.addEventListener("input", e => { state.customExtra = e.target.value; updateAll(); });
+      shortLegsToggle.addEventListener("change", e => { state.shortLegs = e.target.checked; updateAll(); });
+      gardenBgToggle.addEventListener("change", e => { state.gardenBg = e.target.checked; updateAll(); });
+
+      quoteSelect.addEventListener("change", e => {
+        state.quote = e.target.value;
+        quoteInput.value = state.quote;
+        updatePreview();
+      });
+
+      quoteInput.addEventListener("input", e => {
+        state.quote = e.target.value || "„Wuff!“";
+        updatePreview();
+      });
+
+      // Copy & Save Actions
+      document.getElementById("copyPromptBtn").addEventListener("click", () => copyText(promptOutput.value, "copyPromptBtn", "✅ Prompt kopiert!"));
+      document.getElementById("copyExtraBtn").addEventListener("click", () => copyText(extraOutput.value, "copyExtraBtn", "✅ Kopiert!"));
+      document.getElementById("saveFavBtn").addEventListener("click", saveFavorite);
+      document.getElementById("copyCaptionBtn").addEventListener("click", copySocialCaption);
+
+      renderFavorites();
+      updateAll();
+    }
+
+    function setupPillGroup(groupId, dataAttr, callback) {
+      const container = document.getElementById(groupId);
+      container.querySelectorAll(".pill-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          container.querySelectorAll(".pill-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          callback(btn.dataset[dataAttr]);
+        });
+      });
+    }
+
+    function buildPrompt() {
+      const sceneObj = SCENES.find(s => s.id === state.sceneId) || SCENES[0];
+      const parts = [
+        STYLES[state.style],
+        "adorable rough-haired dachshund (Rauhaardackel) named Max with warm brown and grizzled dark coat, expressive dark eyes, bushy eyebrows, beard, and a little golden tuft of hair on top of his head"
+      ];
+
+      if (state.shortLegs) {
+        parts.push("anatomically accurate dachshund proportions, very short stubby dachshund legs, elongated low-to-the-ground sausage body, cute short paws");
+      }
+
+      parts.push(EXPRESSIONS[state.expression]);
+      parts.push(sceneObj.prompt);
+
+      if (state.gardenBg) {
+        parts.push("in a lush sunny Berlin allotment garden (Kleingarten) with wooden picket fence, ripe red San Marzano tomatoes and colorful chili plants");
+      }
+
+      if (state.customExtra.trim()) {
+        parts.push(state.customExtra.trim());
+      }
+
+      parts.push(`cinematic composition, rich storytelling framing, aspect ratio ${state.ratio}, no text or speech bubbles in image`);
+      return parts.join(", ");
+    }
+
+    function updateAll() {
+      const sceneObj = SCENES.find(s => s.id === state.sceneId) || SCENES[0];
+      promptOutput.value = buildPrompt();
+
+      if (state.platform === "gemini") {
+        extraBoxTitle.textContent = "🎬 Google Flow Kamera-Bewegung (Image-to-Video)";
+        extraOutput.value = sceneObj.motion;
+      } else {
+        extraBoxTitle.textContent = "🚫 Draw Things / SDXL Negative Prompt";
+        extraOutput.value = "long legs, tall dog, terrier proportions, German shepherd, smooth coat, deformed paws, extra limbs, text, watermark, speech bubble, blurry, low quality";
+      }
+
+      updatePreview();
+    }
+
+    function updatePreview() {
+      bubbleText.textContent = state.quote;
+      const styleNames = {
+        pixar: "Pixar 3D",
+        comic: "Comic",
+        cabaret: "1920er Plakat",
+        photo: "Foto-Look"
+      };
+      stageCaption.textContent = `${state.ratio} • ${styleNames[state.style]}`;
+
+      comicPreview.className = "comic-preview";
+      if (state.ratio === "9:16") comicPreview.classList.add("ratio-9-16");
+      if (state.ratio === "1:1") comicPreview.classList.add("ratio-1-1");
+    }
+
+    function copySocialCaption() {
+      const caption = `${state.quote} 🐾\n\nUnser Kleingarten-Chef Max hat wieder alles fest im Griff in Berlin! 🍅🌶️\n\n#Rauhaardackel #DackelMax #BerlinerSchnauze #Kleingarten #DackelLiebe`;
+      copyText(caption, "copyCaptionBtn", "✅ Caption + Hashtags kopiert!");
+    }
+
+    function copyText(text, btnId, successLabel) {
+      const btn = document.getElementById(btnId);
+      const original = btn.textContent;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showCopied(btn, original, successLabel));
+      } else {
+        const tmp = document.createElement("textarea");
+        tmp.value = text;
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand("copy");
+        document.body.removeChild(tmp);
+        showCopied(btn, original, successLabel);
+      }
+    }
+
+    function showCopied(btn, original, label) {
+      btn.textContent = label;
+      btn.classList.add("btn-success");
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove("btn-success");
+      }, 1800);
+    }
+
+    function getFavorites() {
+      try {
+        return JSON.parse(localStorage.getItem("pictureMaxFavs") || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function saveFavorite() {
+      const sceneObj = SCENES.find(s => s.id === state.sceneId) || SCENES[0];
+      const favs = getFavorites();
+      favs.unshift({
+        id: Date.now(),
+        title: `${sceneObj.icon} ${sceneObj.title} (${state.ratio})`,
+        prompt: promptOutput.value
+      });
+      localStorage.setItem("pictureMaxFavs", JSON.stringify(favs.slice(0, 15)));
+      renderFavorites();
+      showCopied(document.getElementById("saveFavBtn"), "⭐ Als Favorit merken", "✅ Gespeichert!");
+    }
+
+    function renderFavorites() {
+      const favs = getFavorites();
+      if (!favs.length) {
+        favList.innerHTML = `<div class="helper-note">Noch keine Favoriten gespeichert.</div>`;
+        return;
+      }
+      favList.innerHTML = "";
+      favs.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "fav-item";
+        div.innerHTML = `
+          <div class="fav-header">
+            <span>${item.title}</span>
+          </div>
+          <div class="fav-text">${item.prompt}</div>
+          <div class="mini-btns">
+            <button type="button" class="mini-btn" data-copy="${item.id}">📋 Kopieren</button>
+            <button type="button" class="mini-btn danger" data-del="${item.id}">🗑️ Löschen</button>
+          </div>
+        `;
+        div.querySelector("[data-copy]").addEventListener("click", e => {
+          copyText(item.prompt, e.target.id || "saveFavBtn", "✅ Favorit kopiert!");
+          e.target.textContent = "✅ Kopiert!";
+          setTimeout(() => e.target.textContent = "📋 Kopieren", 1500);
+        });
+        div.querySelector("[data-del]").addEventListener("click", () => {
+          const updated = getFavorites().filter(f => f.id !== item.id);
+          localStorage.setItem("pictureMaxFavs", JSON.stringify(updated));
+          renderFavorites();
+        });
+        favList.appendChild(div);
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
