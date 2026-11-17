@@ -19,8 +19,6 @@
       --cream: #f8f4ec;
       --muted: #a89f91;
       --green: #10b981;
-      --gemini-blue: #3b82f6;
-      --gemini-purple: #8b5cf6;
     }
 
     * {
@@ -134,8 +132,8 @@
     }
 
     .ref-thumb {
-      width: 64px;
-      height: 64px;
+      width: 68px;
+      height: 68px;
       border-radius: 12px;
       background: #141210;
       border: 1px solid var(--border);
@@ -170,15 +168,21 @@
       display: block;
     }
 
+    .ref-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
     .file-label {
       display: inline-block;
-      margin-top: 8px;
       background: #141210;
       border: 1px solid var(--amber);
       color: var(--amber);
-      padding: 6px 12px;
+      padding: 6px 11px;
       border-radius: 9px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       cursor: pointer;
     }
@@ -328,6 +332,15 @@
       font-size: 0.96rem;
       padding: 15px 16px;
       box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-share {
+      width: 100%;
+      flex-basis: 100%;
+      background: linear-gradient(135deg, #059669 0%, #0284c7 100%);
+      color: #fff;
+      font-size: 0.92rem;
+      padding: 13px 16px;
     }
 
     .btn-primary {
@@ -518,15 +531,17 @@
     <!-- 0. Referenzfoto von Max -->
     <section class="card">
       <div class="card-title">
-        <span>🐾 Max-Referenzfoto (Lokal gespeichert)</span>
+        <span>🐾 Max-Referenzfoto (Für Gemini-Transfer)</span>
       </div>
       <div class="ref-box">
         <div class="ref-thumb" id="refThumb">🐕</div>
         <div class="ref-info">
           <strong id="refStatusTitle">Kein Referenzfoto hinterlegt</strong>
-          <span id="refStatusSub">Hinterlege ein Foto von Max als Gedächtnisstütze & Vorschau für deine Gemini-Generierung.</span>
-          <label class="file-label" for="refPhotoInput">📸 Foto von Max auswählen</label>
-          <input type="file" id="refPhotoInput" accept="image/*" style="display:none;" />
+          <span id="refStatusSub">Wähle einmal ein Foto von Max aus. Über „Foto & Prompt an Gemini teilen“ schickst du beides direkt rüber!</span>
+          <div class="ref-actions">
+            <label class="file-label" for="refPhotoInput">📸 Max-Foto wählen</label>
+            <input type="file" id="refPhotoInput" accept="image/*" style="display:none;" />
+          </div>
         </div>
       </div>
     </section>
@@ -592,10 +607,18 @@
       </div>
     </section>
 
-    <!-- 3. Szene & Gesichtsausdruck -->
+    <!-- 3. Kulisse / Umgebung -->
     <section class="card">
       <div class="card-title">
-        <span>3. Alltagsszene & Gesichtsausdruck</span>
+        <span>3. Kulisse & Schauplatz</span>
+      </div>
+      <div class="pill-group" id="settingGroup"></div>
+    </section>
+
+    <!-- 4. Szene & Gesichtsausdruck -->
+    <section class="card">
+      <div class="card-title">
+        <span>4. Aktion & Gesichtsausdruck</span>
       </div>
       <div class="scene-grid" id="sceneGroup"></div>
 
@@ -606,7 +629,7 @@
         <select id="expressionSelect">
           <option value="skeptical">🤨 Skeptischer Berliner Seitenblick (Augenbraue hoch)</option>
           <option value="begging">🥺 Unwiderstehlicher Dackelblick (große Kulleraugen)</option>
-          <option value="proud">👑 Stolzer Kleingarten-Chef (Brust raus)</option>
+          <option value="proud">👑 Stolzer Chef-Blick (Brust raus)</option>
           <option value="sleepy">😴 Tiefenentspannt & verschlafen</option>
           <option value="barking">📢 Lautstark bellender Wachhund</option>
         </select>
@@ -616,7 +639,7 @@
         <label for="customExtra" style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:6px;">
           Optionales Extra-Detail (Englisch oder Deutsch):
         </label>
-        <input type="text" id="customExtra" placeholder="z. B. wearing a tiny golden crown, sunny afternoon..." />
+        <input type="text" id="customExtra" placeholder="z. B. wearing a tiny golden crown, headphones, sunglasses..." />
       </div>
 
       <div class="toggle-row">
@@ -626,33 +649,28 @@
         </div>
         <input type="checkbox" id="shortLegsToggle" checked />
       </div>
-
-      <div class="toggle-row">
-        <div>
-          <label for="gardenBgToggle">🍅 Kleingarten-Kulisse (Adlershof)</label>
-          <small>Holzzaun, San-Marzano-Tomaten & bunte Chilis</small>
-        </div>
-        <input type="checkbox" id="gardenBgToggle" checked />
-      </div>
     </section>
 
-    <!-- 4. Fertiger Prompt & Gemini-Direktstart -->
+    <!-- 5. Fertiger Prompt & Gemini-Transfer -->
     <section class="card">
       <div class="card-title">
-        <span>4. Fertiger KI-Prompt & Direktstart</span>
+        <span>5. Fertiger KI-Prompt & Übertragung</span>
       </div>
       <textarea id="promptOutput" readonly></textarea>
 
       <div class="btn-row">
-        <button type="button" class="btn btn-gemini" id="openGeminiBtn">
-          🚀 Prompt kopieren & Gemini öffnen
+        <button type="button" class="btn btn-share" id="sharePhotoPromptBtn">
+          📤 Foto & Prompt über iPhone-Teilen an Gemini senden
         </button>
-        <button type="button" class="btn btn-primary" id="copyPromptBtn">📋 Nur kopieren</button>
+        <button type="button" class="btn btn-gemini" id="openGeminiBtn">
+          🚀 Nur Prompt kopieren & Gemini-Web öffnen
+        </button>
+        <button type="button" class="btn btn-primary" id="copyPromptBtn">📋 Kopieren</button>
         <button type="button" class="btn btn-secondary" id="saveFavBtn">⭐ Merken</button>
       </div>
 
       <div class="helper-note">
-        So geht’s: Auf den blauen Button tippen → in Gemini einfügen (und bei Bedarf Max-Foto über „+“ anhängen) → absenden!
+        Tipp beim grünen Button: Das Foto wird direkt übergeben & der Prompt liegt gleichzeitig in deiner Zwischenablage – in Gemini einfach auf „Einfügen“ tippen!
       </div>
 
       <!-- Zusatzbox je nach Plattform -->
@@ -667,10 +685,10 @@
       </div>
     </section>
 
-    <!-- 5. Berliner Comic-Vorschau & Social Caption -->
+    <!-- 6. Berliner Comic-Vorschau & Social Caption -->
     <section class="card">
       <div class="card-title">
-        <span>5. Berliner Schnauze & Comic-Vorschau</span>
+        <span>6. Berliner Schnauze & Comic-Vorschau</span>
       </div>
       <label for="quoteSelect" style="display:block; font-size:0.8rem; color:var(--muted); margin-bottom:6px;">
         Spruch auswählen oder selbst tippen:
@@ -684,7 +702,7 @@
         </div>
         <div class="max-stage">
           <div class="max-avatar">🐕</div>
-          <div class="stage-caption" id="stageCaption">9:16 • Pixar 3D Animation</div>
+          <div class="stage-caption" id="stageCaption">9:16 • Pixar 3D • Kleingarten</div>
         </div>
       </div>
 
@@ -693,10 +711,10 @@
       </div>
     </section>
 
-    <!-- 6. Gespeicherte Favoriten -->
+    <!-- 7. Gespeicherte Favoriten -->
     <section class="card">
       <div class="card-title">
-        <span>6. Deine gespeicherten Max-Prompts</span>
+        <span>7. Deine gespeicherten Max-Prompts</span>
       </div>
       <div id="favList">
         <div class="helper-note">Noch keine Favoriten gespeichert.</div>
@@ -705,24 +723,83 @@
 
   </main>
 
-  <div class="toast" id="toast">✅ Prompt kopiert! Öffne Gemini...</div>
+  <div class="toast" id="toast">✅ Prompt kopiert!</div>
 
   <script>
+    const SETTINGS = [
+      {
+        id: "garden",
+        icon: "🍅",
+        title: "Kleingarten Adlershof",
+        sub: "Tomaten, Chilis & Holzzaun",
+        prompt: "in a lush sunny Berlin allotment garden (Kleingarten) with wooden picket fence, wooden garden shed, ripe red San Marzano tomatoes and colorful chili plants"
+      },
+      {
+        id: "livingroom",
+        icon: "🛋️",
+        title: "Wohnzimmer & Sofa",
+        sub: "Kuscheldecke & Kissenburg",
+        prompt: "in a cozy warm Berlin apartment living room with plush sofa cushions, soft knitted blankets, warm lamp light and wooden floorboards"
+      },
+      {
+        id: "berlin_kiez",
+        icon: "🏛️",
+        title: "Berliner Kiez & Altbau",
+        sub: "Kopfsteinpflaster & Eckkneipe",
+        prompt: "on a charming historic Berlin cobblestone street with classic Altbau facades, sidewalk trees, vintage street lanterns and a traditional Berlin corner cafe"
+      },
+      {
+        id: "studio",
+        icon: "🎙️",
+        title: "Tonstudio & Bühne",
+        sub: "Mikrofon, Kopfhörer & Musik",
+        prompt: "inside a moody warm home recording studio with a condenser microphone, studio monitors, acoustic panels and warm amber mood lighting"
+      },
+      {
+        id: "cabaret_stage",
+        icon: "🎭",
+        title: "1920er Varieté-Bühne",
+        sub: "Roter Samtvorhang & Spotlight",
+        prompt: "on a glamorous 1920s Berlin cabaret theater stage with heavy red velvet curtains, golden Art Deco ornaments and a dramatic warm spotlight"
+      },
+      {
+        id: "beach",
+        icon: "🏖️",
+        title: "Strand & Ostsee",
+        sub: "Strandkorb, Dünen & Meer",
+        prompt: "on a sunny Baltic Sea sandy beach with grassy dunes, a classic striped wicker beach chair (Strandkorb) and sparkling blue ocean waves"
+      },
+      {
+        id: "winter",
+        icon: "❄️",
+        title: "Winter & Schnee",
+        sub: "Verschneiter Park & Lichter",
+        prompt: "in a magical snowy winter park with fresh white snow, warm golden fairy lights in the background and crisp winter sunshine"
+      },
+      {
+        id: "neutral",
+        icon: "🎨",
+        title: "Neutral / Fokus auf Szene",
+        sub: "Kein fester Ort vorgegeben",
+        prompt: ""
+      }
+    ];
+
     const SCENES = [
       {
         id: "patrol",
-        icon: "🍅",
-        title: "Garten-Patrouille",
-        sub: "Kontrollgang bei den Tomaten",
-        prompt: "patrolling proudly on a garden path between lush green tomato vines heavy with ripe red San Marzano tomatoes and chili bushes",
-        motion: "Slow low-angle tracking shot following the short-legged dachshund walking proudly down the sunny garden path, gentle breeze moving the tomato leaves, warm golden sunlight."
+        icon: "🕵️",
+        title: "Stolze Patrouille",
+        sub: "Kontrollgang als Chef",
+        prompt: "patrolling proudly with chest puffed out, inspecting his territory like the undisputed boss",
+        motion: "Slow low-angle tracking shot following the short-legged dachshund walking proudly, warm cinematic lighting and shallow depth of field."
       },
       {
         id: "sofa",
         icon: "👑",
-        title: "König auf dem Sofa",
-        sub: "Regiert die Gartenlounge",
-        prompt: "sitting majestically like a royal king right in the middle of cozy outdoor rattan sofa cushions, ruling the terrace",
+        title: "König auf dem Thron",
+        sub: "Regiert über Kissen",
+        prompt: "sitting majestically like a royal king right in the middle of plush cushions, ruling the place",
         motion: "Subtle slow push-in camera movement towards the dachshund sitting like a king on the cushions, slight curious ear twitch and blinking eyes."
       },
       {
@@ -730,16 +807,16 @@
         icon: "🥣",
         title: "Leerer Napf Drama",
         sub: "Seit Wochen nichts gegessen",
-        prompt: "sitting dramatically in front of his completely empty dog bowl on rustic tiles, staring upward as if he has not eaten in weeks",
+        prompt: "sitting dramatically in front of his completely empty dog bowl, staring upward as if he has not eaten in weeks",
         motion: "Gentle downward tilt shot ending on the dachshund looking up with huge pleading eyes next to his empty bowl, subtle breathing motion."
       },
       {
         id: "gate",
-        icon: "📮",
-        title: "Wachhund am Tor",
-        sub: "Meldet den Postboten",
-        prompt: "standing heroically with chest puffed out at the wooden garden gate, barking furiously like a mighty watchdog at an approaching postman",
-        motion: "Dynamic handheld low-angle shot at the wooden garden gate as the dachshund barks heroically, shallow depth of field with postman blurred in background."
+        icon: "📢",
+        title: "Furchtloser Wachhund",
+        sub: "Meldet jeden Besucher",
+        prompt: "standing heroically with chest puffed out, barking furiously like a mighty watchdog",
+        motion: "Dynamic handheld low-angle shot as the dachshund barks heroically, shallow depth of field and cinematic golden light."
       },
       {
         id: "blanket",
@@ -747,31 +824,31 @@
         title: "Decken-Höhle",
         sub: "Nur die Nase schaut raus",
         prompt: "snuggled deeply inside a warm cozy fleece blanket cave, only his wet black nose, beard, and bushy eyebrows peeking out curiously",
-        motion: "Very slow intimate close-up on the dachshund's nose and eyes peeking out from the warm fleece blanket, soft morning light dust motes."
+        motion: "Very slow intimate close-up on the dachshund's nose and eyes peeking out from the warm fleece blanket, soft light dust motes."
       },
       {
         id: "grill",
         icon: "🌭",
-        title: "Grill-Inspektor",
-        sub: "Bewacht die Bratwurst",
-        prompt: "sitting laser-focused next to a smoking charcoal barbecue grill in the garden, hypnotized by sizzling sausages",
-        motion: "Slow cinematic orbit around the dachshund staring intensely at the smoking grill, rising wisps of barbecue smoke in golden evening light."
+        title: "Leckerli-Hypnose",
+        sub: "Fixiert die Bratwurst",
+        prompt: "sitting laser-focused and hypnotized, staring intensely at a delicious sizzling sausage just out of reach",
+        motion: "Slow cinematic orbit around the dachshund staring intensely with raised eyebrows, subtle head tilt."
       },
       {
         id: "digging",
         icon: "🐾",
-        title: "Maulwurf-Jäger",
-        sub: "Erde auf der Nase",
-        prompt: "with a smudge of fresh dark garden soil on his nose and beard after digging an important hole next to a flower bed",
-        motion: "Playful low-angle camera push-in as the dachshund proudly stands beside a freshly dug hole with dirt on his nose, tail wagging slightly."
+        title: "Erde auf der Nase",
+        sub: "Wichtige Buddel-Arbeit",
+        prompt: "with a cute smudge of fresh dark soil on his wet nose and beard after doing important digging work",
+        motion: "Playful low-angle camera push-in as the dachshund proudly poses with a smudge of dirt on his nose, tail wagging slightly."
       },
       {
-        id: "pool",
+        id: "vip",
         icon: "🕶️",
-        title: "Sommer-Urlauber",
-        sub: "Chillen am Gartenpool",
-        prompt: "lounging coolly on a striped beach towel next to a round garden pool in summer sunshine, looking like a relaxed VIP",
-        motion: "Smooth horizontal pan across the sunny garden pool deck revealing the dachshund relaxing like a VIP on a striped towel, shimmering water reflections."
+        title: "Entspannter VIP",
+        sub: "Chillen mit Sonnenbrille",
+        prompt: "lounging coolly like a relaxed VIP superstar wearing tiny retro sunglasses",
+        motion: "Smooth horizontal pan revealing the dachshund relaxing like a cool VIP superstar, subtle head nod."
       }
     ];
 
@@ -792,32 +869,33 @@
 
     const QUOTES = [
       "„Ick hab det jefühl, hier jibt’s heute keene Leckerlis.“",
-      "„Det sind MEINE San-Marzano-Tomaten, klar soweit?“",
-      "„Postbote? Ick regier’ det hier seit 2015, Keule!“",
+      "„Det is MEIN Revier, klar soweit?“",
+      "„Ick regier’ det hier seit 2015, Keule!“",
       "„Kurze Beene, aber ’n Herz wie’n Berliner Bär.“",
       "„Ick bin nich stur. Ick hab nur ’n festen Standpunkt.“",
       "„Det Napf-Echo is heute wieder unerträglich laut.“",
-      "„Adlershof-Kontrollgang beendet. Allet meins.“"
+      "„Kontrollgang beendet. Allet meins.“"
     ];
 
     const state = {
       platform: "gemini",
       ratio: "9:16",
       style: "pixar",
+      settingId: "garden",
       sceneId: "patrol",
       expression: "skeptical",
       customExtra: "",
       shortLegs: true,
-      gardenBg: true,
-      quote: QUOTES[0]
+      quote: QUOTES[0],
+      refDataUrl: null
     };
 
     // DOM Elements
+    const settingGroup = document.getElementById("settingGroup");
     const sceneGroup = document.getElementById("sceneGroup");
     const expressionSelect = document.getElementById("expressionSelect");
     const customExtra = document.getElementById("customExtra");
     const shortLegsToggle = document.getElementById("shortLegsToggle");
-    const gardenBgToggle = document.getElementById("gardenBgToggle");
     const promptOutput = document.getElementById("promptOutput");
     const extraOutput = document.getElementById("extraOutput");
     const extraBoxTitle = document.getElementById("extraBoxTitle");
@@ -830,7 +908,23 @@
     const toast = document.getElementById("toast");
 
     function init() {
-      // Render scenes
+      // Render settings (Kulissen)
+      SETTINGS.forEach(st => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "pill-btn" + (st.id === state.settingId ? " active" : "");
+        btn.dataset.setting = st.id;
+        btn.innerHTML = `${st.icon} ${st.title}<span class="sub">${st.sub}</span>`;
+        btn.addEventListener("click", () => {
+          state.settingId = st.id;
+          document.querySelectorAll("#settingGroup .pill-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          updateAll();
+        });
+        settingGroup.appendChild(btn);
+      });
+
+      // Render scenes (Aktionen)
       SCENES.forEach(s => {
         const btn = document.createElement("button");
         btn.type = "button";
@@ -864,7 +958,6 @@
       expressionSelect.addEventListener("change", e => { state.expression = e.target.value; updateAll(); });
       customExtra.addEventListener("input", e => { state.customExtra = e.target.value; updateAll(); });
       shortLegsToggle.addEventListener("change", e => { state.shortLegs = e.target.checked; updateAll(); });
-      gardenBgToggle.addEventListener("change", e => { state.gardenBg = e.target.checked; updateAll(); });
 
       quoteSelect.addEventListener("change", e => {
         state.quote = e.target.value;
@@ -881,7 +974,8 @@
       document.getElementById("refPhotoInput").addEventListener("change", handleRefPhotoUpload);
       loadSavedRefPhoto();
 
-      // Copy & Open Gemini Actions
+      // Actions
+      document.getElementById("sharePhotoPromptBtn").addEventListener("click", sharePhotoAndPrompt);
       document.getElementById("openGeminiBtn").addEventListener("click", copyAndOpenGemini);
       document.getElementById("copyPromptBtn").addEventListener("click", () => copyText(promptOutput.value, "copyPromptBtn", "✅ Kopiert!"));
       document.getElementById("copyExtraBtn").addEventListener("click", () => copyText(extraOutput.value, "copyExtraBtn", "✅ Kopiert!"));
@@ -899,9 +993,8 @@
       reader.onload = function(evt) {
         const img = new Image();
         img.onload = function() {
-          // Resize small thumbnail for localStorage safety
           const canvas = document.createElement("canvas");
-          const maxSize = 240;
+          const maxSize = 640;
           let w = img.width;
           let h = img.height;
           if (w > h) {
@@ -912,12 +1005,12 @@
           canvas.width = w;
           canvas.height = h;
           canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-          const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
           try {
             localStorage.setItem("pictureMaxRefPhoto", dataUrl);
           } catch (err) {}
           applyRefPhoto(dataUrl);
-          showToast("✅ Max-Referenzfoto gespeichert!");
+          showToast("✅ Max-Foto gespeichert & bereit zum Teilen!");
         };
         img.src = evt.target.result;
       };
@@ -932,10 +1025,49 @@
     }
 
     function applyRefPhoto(dataUrl) {
+      state.refDataUrl = dataUrl;
       document.getElementById("refThumb").innerHTML = `<img src="${dataUrl}" alt="Max" />`;
       document.getElementById("headerAvatar").innerHTML = `<img src="${dataUrl}" alt="Max" />`;
-      document.getElementById("refStatusTitle").textContent = "Max-Referenzfoto aktiv ✓";
-      document.getElementById("refStatusSub").textContent = "Beim Öffnen von Gemini einfach dein Max-Foto über „+“ aus den Fotos anhängen!";
+      document.getElementById("refStatusTitle").textContent = "Max-Referenzfoto bereit ✓";
+      document.getElementById("refStatusSub").textContent = "Tippe unten auf den grünen Button, um Foto & Prompt gemeinsam an Gemini zu senden.";
+    }
+
+    function dataURLtoFile(dataurl, filename) {
+      const arr = dataurl.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    }
+
+    async function sharePhotoAndPrompt() {
+      const text = promptOutput.value;
+      fallbackCopy(text);
+
+      if (!state.refDataUrl) {
+        showToast("⚠️ Bitte oben erst ein Foto von Max auswählen!");
+        return;
+      }
+
+      try {
+        const file = dataURLtoFile(state.refDataUrl, "dackel-max-referenz.jpg");
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          showToast("✅ Prompt kopiert! Wähle jetzt Gemini im Menü...");
+          await navigator.share({
+            files: [file],
+            text: text
+          });
+        } else {
+          showToast("✅ Prompt kopiert! Weiterleitung zu Gemini...");
+          setTimeout(() => { window.location.href = "https://gemini.google.com/app"; }, 500);
+        }
+      } catch (err) {
+        // User cancelled share or fallback
+      }
     }
 
     function setupPillGroup(groupId, dataAttr, callback) {
@@ -951,6 +1083,8 @@
 
     function buildPrompt() {
       const sceneObj = SCENES.find(s => s.id === state.sceneId) || SCENES[0];
+      const settingObj = SETTINGS.find(st => st.id === state.settingId) || SETTINGS[0];
+
       const parts = [
         STYLES[state.style],
         "adorable rough-haired dachshund (Rauhaardackel) named Max with warm brown and grizzled dark coat, expressive dark eyes, bushy eyebrows, beard, and a little golden tuft of hair on top of his head"
@@ -963,8 +1097,8 @@
       parts.push(EXPRESSIONS[state.expression]);
       parts.push(sceneObj.prompt);
 
-      if (state.gardenBg) {
-        parts.push("in a lush sunny Berlin allotment garden (Kleingarten) with wooden picket fence, ripe red San Marzano tomatoes and colorful chili plants");
+      if (settingObj.prompt) {
+        parts.push(settingObj.prompt);
       }
 
       if (state.customExtra.trim()) {
@@ -998,7 +1132,8 @@
         cabaret: "1920er Plakat",
         photo: "Foto-Look"
       };
-      stageCaption.textContent = `${state.ratio} • ${styleNames[state.style]}`;
+      const settingObj = SETTINGS.find(st => st.id === state.settingId) || SETTINGS[0];
+      stageCaption.textContent = `${state.ratio} • ${styleNames[state.style]} • ${settingObj.title}`;
 
       comicPreview.className = "comic-preview";
       if (state.ratio === "9:16") comicPreview.classList.add("ratio-9-16");
@@ -1055,7 +1190,7 @@
     function showToast(msg) {
       toast.textContent = msg;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2600);
+      setTimeout(() => toast.classList.remove("show"), 2800);
     }
 
     function getFavorites() {
@@ -1068,10 +1203,11 @@
 
     function saveFavorite() {
       const sceneObj = SCENES.find(s => s.id === state.sceneId) || SCENES[0];
+      const settingObj = SETTINGS.find(st => st.id === state.settingId) || SETTINGS[0];
       const favs = getFavorites();
       favs.unshift({
         id: Date.now(),
-        title: `${sceneObj.icon} ${sceneObj.title} (${state.ratio})`,
+        title: `${sceneObj.icon} ${sceneObj.title} • ${settingObj.title}`,
         prompt: promptOutput.value
       });
       localStorage.setItem("pictureMaxFavs", JSON.stringify(favs.slice(0, 15)));
