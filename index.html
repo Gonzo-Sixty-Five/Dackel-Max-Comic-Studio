@@ -19,6 +19,8 @@
       --cream: #f8f4ec;
       --muted: #a89f91;
       --green: #10b981;
+      --gemini-blue: #3b82f6;
+      --gemini-purple: #8b5cf6;
     }
 
     * {
@@ -32,13 +34,13 @@
       background: var(--bg);
       color: var(--cream);
       line-height: 1.45;
-      padding-bottom: 40px;
+      padding-bottom: 44px;
     }
 
     header {
       background: linear-gradient(135deg, #291d12 0%, #1a1613 100%);
       border-bottom: 2px solid var(--amber);
-      padding: 20px 16px 16px;
+      padding: 18px 16px 14px;
       position: sticky;
       top: 0;
       z-index: 20;
@@ -70,18 +72,25 @@
       font-size: 24px;
       box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
       flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .badge-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     h1 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: 1.22rem;
       letter-spacing: 0.3px;
       color: #fff;
     }
 
     .subtitle {
       margin: 2px 0 0;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--amber);
     }
 
@@ -111,6 +120,67 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+    }
+
+    /* Reference Photo Box */
+    .ref-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card-2);
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .ref-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background: #141210;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .ref-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ref-info {
+      flex: 1;
+      font-size: 0.82rem;
+    }
+
+    .ref-info strong {
+      display: block;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .ref-info span {
+      color: var(--muted);
+      font-size: 0.75rem;
+      display: block;
+    }
+
+    .file-label {
+      display: inline-block;
+      margin-top: 8px;
+      background: #141210;
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      padding: 6px 12px;
+      border-radius: 9px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .pill-group {
@@ -234,19 +304,30 @@
       min-width: 140px;
       border: none;
       border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 0.88rem;
+      padding: 13px 14px;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 7px;
+      text-decoration: none;
       transition: transform 0.1s ease, opacity 0.15s ease;
     }
 
     .btn:active {
       transform: scale(0.98);
+    }
+
+    .btn-gemini {
+      width: 100%;
+      flex-basis: 100%;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      color: #fff;
+      font-size: 0.96rem;
+      padding: 15px 16px;
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
     }
 
     .btn-primary {
@@ -263,6 +344,29 @@
     .btn-success {
       background: var(--green) !important;
       color: #06281e !important;
+    }
+
+    /* Toast Banner */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #10b981;
+      color: #052e16;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 12px 18px;
+      border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      transition: transform 0.25s ease;
+      text-align: center;
+      max-width: 92vw;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
     }
 
     /* Comic Preview Card */
@@ -400,16 +504,32 @@
   <header>
     <div class="header-top">
       <div class="brand">
-        <div class="badge-icon">🐾</div>
+        <div class="badge-icon" id="headerAvatar">🐾</div>
         <div>
           <h1>Picture Max Studio</h1>
-          <div class="subtitle">Rauhaardackel-Comic & Prompt-Generator • Berlin</div>
+          <div class="subtitle">Rauhaardackel-Comic & Gemini-Brücke • Berlin</div>
         </div>
       </div>
     </div>
   </header>
 
   <main class="container">
+
+    <!-- 0. Referenzfoto von Max -->
+    <section class="card">
+      <div class="card-title">
+        <span>🐾 Max-Referenzfoto (Lokal gespeichert)</span>
+      </div>
+      <div class="ref-box">
+        <div class="ref-thumb" id="refThumb">🐕</div>
+        <div class="ref-info">
+          <strong id="refStatusTitle">Kein Referenzfoto hinterlegt</strong>
+          <span id="refStatusSub">Hinterlege ein Foto von Max als Gedächtnisstütze & Vorschau für deine Gemini-Generierung.</span>
+          <label class="file-label" for="refPhotoInput">📸 Foto von Max auswählen</label>
+          <input type="file" id="refPhotoInput" accept="image/*" style="display:none;" />
+        </div>
+      </div>
+    </section>
 
     <!-- 1. Plattform & Format -->
     <section class="card">
@@ -434,7 +554,7 @@
         </button>
         <button type="button" class="pill-btn" data-ratio="1:1">
           💿 1:1
-          <span class="sub">Cover / Insta</span>
+          <span class="sub">Song-Cover / Insta</span>
         </button>
         <button type="button" class="pill-btn" data-ratio="16:9">
           🎬 16:9
@@ -516,18 +636,23 @@
       </div>
     </section>
 
-    <!-- 4. Fertiger Prompt -->
+    <!-- 4. Fertiger Prompt & Gemini-Direktstart -->
     <section class="card">
       <div class="card-title">
-        <span>4. Fertiger KI-Prompt</span>
+        <span>4. Fertiger KI-Prompt & Direktstart</span>
       </div>
       <textarea id="promptOutput" readonly></textarea>
-      <div class="helper-note">
-        Tipp: Wenn du bei Gemini oder Flow ein Referenzfoto von Max hochlädst, erkennt die KI sein Gesicht direkt wieder.
-      </div>
+
       <div class="btn-row">
-        <button type="button" class="btn btn-primary" id="copyPromptBtn">📋 Prompt kopieren</button>
-        <button type="button" class="btn btn-secondary" id="saveFavBtn">⭐ Als Favorit merken</button>
+        <button type="button" class="btn btn-gemini" id="openGeminiBtn">
+          🚀 Prompt kopieren & Gemini öffnen
+        </button>
+        <button type="button" class="btn btn-primary" id="copyPromptBtn">📋 Nur kopieren</button>
+        <button type="button" class="btn btn-secondary" id="saveFavBtn">⭐ Merken</button>
+      </div>
+
+      <div class="helper-note">
+        So geht’s: Auf den blauen Button tippen → in Gemini einfügen (und bei Bedarf Max-Foto über „+“ anhängen) → absenden!
       </div>
 
       <!-- Zusatzbox je nach Plattform -->
@@ -579,6 +704,8 @@
     </section>
 
   </main>
+
+  <div class="toast" id="toast">✅ Prompt kopiert! Öffne Gemini...</div>
 
   <script>
     const SCENES = [
@@ -700,6 +827,7 @@
     const stageCaption = document.getElementById("stageCaption");
     const comicPreview = document.getElementById("comicPreview");
     const favList = document.getElementById("favList");
+    const toast = document.getElementById("toast");
 
     function init() {
       // Render scenes
@@ -719,7 +847,7 @@
       });
 
       // Render quotes
-      QUOTES.forEach((q, idx) => {
+      QUOTES.forEach(q => {
         const opt = document.createElement("option");
         opt.value = q;
         opt.textContent = q;
@@ -749,14 +877,65 @@
         updatePreview();
       });
 
-      // Copy & Save Actions
-      document.getElementById("copyPromptBtn").addEventListener("click", () => copyText(promptOutput.value, "copyPromptBtn", "✅ Prompt kopiert!"));
+      // Reference Photo Handling
+      document.getElementById("refPhotoInput").addEventListener("change", handleRefPhotoUpload);
+      loadSavedRefPhoto();
+
+      // Copy & Open Gemini Actions
+      document.getElementById("openGeminiBtn").addEventListener("click", copyAndOpenGemini);
+      document.getElementById("copyPromptBtn").addEventListener("click", () => copyText(promptOutput.value, "copyPromptBtn", "✅ Kopiert!"));
       document.getElementById("copyExtraBtn").addEventListener("click", () => copyText(extraOutput.value, "copyExtraBtn", "✅ Kopiert!"));
       document.getElementById("saveFavBtn").addEventListener("click", saveFavorite);
       document.getElementById("copyCaptionBtn").addEventListener("click", copySocialCaption);
 
       renderFavorites();
       updateAll();
+    }
+
+    function handleRefPhotoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+          // Resize small thumbnail for localStorage safety
+          const canvas = document.createElement("canvas");
+          const maxSize = 240;
+          let w = img.width;
+          let h = img.height;
+          if (w > h) {
+            if (w > maxSize) { h *= maxSize / w; w = maxSize; }
+          } else {
+            if (h > maxSize) { w *= maxSize / h; h = maxSize; }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+          try {
+            localStorage.setItem("pictureMaxRefPhoto", dataUrl);
+          } catch (err) {}
+          applyRefPhoto(dataUrl);
+          showToast("✅ Max-Referenzfoto gespeichert!");
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function loadSavedRefPhoto() {
+      try {
+        const saved = localStorage.getItem("pictureMaxRefPhoto");
+        if (saved) applyRefPhoto(saved);
+      } catch (e) {}
+    }
+
+    function applyRefPhoto(dataUrl) {
+      document.getElementById("refThumb").innerHTML = `<img src="${dataUrl}" alt="Max" />`;
+      document.getElementById("headerAvatar").innerHTML = `<img src="${dataUrl}" alt="Max" />`;
+      document.getElementById("refStatusTitle").textContent = "Max-Referenzfoto aktiv ✓";
+      document.getElementById("refStatusSub").textContent = "Beim Öffnen von Gemini einfach dein Max-Foto über „+“ aus den Fotos anhängen!";
     }
 
     function setupPillGroup(groupId, dataAttr, callback) {
@@ -826,25 +1005,42 @@
       if (state.ratio === "1:1") comicPreview.classList.add("ratio-1-1");
     }
 
+    function copyAndOpenGemini() {
+      const text = promptOutput.value;
+      fallbackCopy(text);
+      showToast("✅ Prompt kopiert! Weiterleitung zu Gemini...");
+      setTimeout(() => {
+        window.location.href = "https://gemini.google.com/app";
+      }, 450);
+    }
+
     function copySocialCaption() {
       const caption = `${state.quote} 🐾\n\nUnser Kleingarten-Chef Max hat wieder alles fest im Griff in Berlin! 🍅🌶️\n\n#Rauhaardackel #DackelMax #BerlinerSchnauze #Kleingarten #DackelLiebe`;
       copyText(caption, "copyCaptionBtn", "✅ Caption + Hashtags kopiert!");
     }
 
+    function fallbackCopy(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => execCopy(text));
+      } else {
+        execCopy(text);
+      }
+    }
+
+    function execCopy(text) {
+      const tmp = document.createElement("textarea");
+      tmp.value = text;
+      document.body.appendChild(tmp);
+      tmp.select();
+      document.execCommand("copy");
+      document.body.removeChild(tmp);
+    }
+
     function copyText(text, btnId, successLabel) {
       const btn = document.getElementById(btnId);
       const original = btn.textContent;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => showCopied(btn, original, successLabel));
-      } else {
-        const tmp = document.createElement("textarea");
-        tmp.value = text;
-        document.body.appendChild(tmp);
-        tmp.select();
-        document.execCommand("copy");
-        document.body.removeChild(tmp);
-        showCopied(btn, original, successLabel);
-      }
+      fallbackCopy(text);
+      showCopied(btn, original, successLabel);
     }
 
     function showCopied(btn, original, label) {
@@ -854,6 +1050,12 @@
         btn.textContent = original;
         btn.classList.remove("btn-success");
       }, 1800);
+    }
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
     function getFavorites() {
@@ -874,7 +1076,7 @@
       });
       localStorage.setItem("pictureMaxFavs", JSON.stringify(favs.slice(0, 15)));
       renderFavorites();
-      showCopied(document.getElementById("saveFavBtn"), "⭐ Als Favorit merken", "✅ Gespeichert!");
+      showCopied(document.getElementById("saveFavBtn"), "⭐ Merken", "✅ Gespeichert!");
     }
 
     function renderFavorites() {
@@ -894,13 +1096,19 @@
           <div class="fav-text">${item.prompt}</div>
           <div class="mini-btns">
             <button type="button" class="mini-btn" data-copy="${item.id}">📋 Kopieren</button>
-            <button type="button" class="mini-btn danger" data-del="${item.id}">🗑️ Löschen</button>
+            <button type="button" class="mini-btn" data-gemini="${item.id}">🚀 Gemini</button>
+            <button type="button" class="mini-btn danger" data-del="${item.id}">🗑️</button>
           </div>
         `;
         div.querySelector("[data-copy]").addEventListener("click", e => {
-          copyText(item.prompt, e.target.id || "saveFavBtn", "✅ Favorit kopiert!");
+          fallbackCopy(item.prompt);
           e.target.textContent = "✅ Kopiert!";
           setTimeout(() => e.target.textContent = "📋 Kopieren", 1500);
+        });
+        div.querySelector("[data-gemini]").addEventListener("click", () => {
+          fallbackCopy(item.prompt);
+          showToast("✅ Favorit kopiert! Öffne Gemini...");
+          setTimeout(() => { window.location.href = "https://gemini.google.com/app"; }, 450);
         });
         div.querySelector("[data-del]").addEventListener("click", () => {
           const updated = getFavorites().filter(f => f.id !== item.id);
